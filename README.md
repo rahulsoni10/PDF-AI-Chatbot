@@ -19,7 +19,7 @@ This project is a chatbot application that answers user questions based on the c
 - **Frontend:** React, TypeScript, Vite
 - **Backend:** Gemini API (NLP model for question-answering)
 - **PDF Processing:** pdf.js
-- **Deployment:** [randomurl.com](https://randomurl.com)
+- **Deployment:** [PDF Chatbot URL](https://pdf-ai-chatbot.onrender.com)
 
 ## Getting Started
 
