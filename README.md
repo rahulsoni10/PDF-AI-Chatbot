@@ -19,7 +19,7 @@ This project is a chatbot application that answers user questions based on the c
 - **Frontend:** React, TypeScript, Vite
 - **Backend:** Gemini API (NLP model for question-answering)
 - **PDF Processing:** pdf.js
-- **Deployment:** [PDF Chatbot URL](iridescent-gaufre-48ae56.netlify.app)
+- **Deployment:** [PDF Chatbot URL](https://iridescent-gaufre-48ae56.netlify.app)
 
 ## Getting Started
 
