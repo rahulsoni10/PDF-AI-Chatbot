@@ -34,6 +34,6 @@ Ensure you have the following installed:
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/your-username/pdf-chatbot.git
+   git clone https://github.com/rahulsoni10/PDF-AI-Chatbot.git
 
 2. Replace the VITE_GEMINI_API_KEY=your-gemini-api-key in the .env file
