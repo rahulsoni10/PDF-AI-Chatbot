@@ -1,0 +1,53 @@
+name: Gemini Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  gemini-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config --global fetch.prune true
+          git fetch origin main
+
+      - name: Generate Diff File
+        run: |
+          git diff origin/main...HEAD > diff.patch
+
+      - name: Send Diff to Gemini
+        run: |
+          DIFF=$(cat diff.patch | head -c 7000 | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+          RESPONSE=$(curl -s -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${{ secrets.GEMINI_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+              "contents": [{
+                "parts": [{
+                  "text": "You are a senior code reviewer. Review this Git diff and tell if the code follows good practices. Reply strictly as PASS or FAIL with reasons. Here is the diff:\n'"${DIFF}"'"
+                }]
+              }]
+            }')
+          echo "$RESPONSE" > response.json
+
+      - name: Comment on PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🤖 **Gemini Code Review Result:**
+            ```
+            $(jq -r '.candidates[0].content.parts[0].text' response.json)
+            ```
+
+      - name: Fail if Gemini says FAIL
+        run: |
+          TEXT=$(jq -r '.candidates[0].content.parts[0].text' response.json)
+          echo "$TEXT"
+          echo "$TEXT" | grep -q "PASS" || exit 1
