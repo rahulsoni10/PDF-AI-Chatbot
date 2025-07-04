@@ -7,6 +7,9 @@ interface Message {
   isBot: boolean;
 }
 
+//Added A comment
+console.log("Added A comment")
+
 function App() {
   const [pdfContent, setPdfContent] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
